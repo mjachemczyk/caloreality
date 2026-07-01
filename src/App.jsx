@@ -4,6 +4,10 @@ import StatCard from "./components/StatCard";
 
 import WeightGraph from "./components/WeightGraph";
 
+import HistoryTable from "./components/HistoryTable";
+
+import DailyEntryForm from "./components/DailyEntryForm";
+
 const CALORIES_PER_POUND = 3500;
 
 export default function App() {
@@ -272,85 +276,27 @@ export default function App() {
               />
             </section>
 
-            <section style={styles.card}>
-              <h2>Add Daily Entry</h2>
-
-              <div style={styles.formGrid}>
-                <Input label="Date" type="date" value={date} setValue={setDate} />
-                <Input label="Weight" value={weight} setValue={setWeight} />
-                <Input
-                  label="Calories In"
-                  value={calIn}
-                  setValue={setCalIn}
-                />
-                <Input
-                  label="Net Calories"
-                  value={netCaloriesInput}
-                  setValue={setNetCaloriesInput}
-                />
-                <Input label="Notes" value={notes} setValue={setNotes} full />
-              </div>
-
-              <button style={styles.primaryButton} onClick={addEntry}>
-                Add Entry
-              </button>
-            </section>
+            <DailyEntryForm
+              date={date}
+              setDate={setDate}
+              weight={weight}
+              setWeight={setWeight}
+              calIn={calIn}
+              setCalIn={setCalIn}
+              netCaloriesInput={netCaloriesInput}
+              setNetCaloriesInput={setNetCaloriesInput}
+              notes={notes}
+              setNotes={setNotes}
+              addEntry={addEntry}
+            />
           </>
         )}
 
        {activeTab === "graph" && <WeightGraph sortedEntries={sortedEntries} />}
 
-        {activeTab === "history" && (
-          <section style={styles.card}>
-            <h2>History</h2>
-            <div style={styles.tableWrapper}>
-              <table style={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Day</th>
-                    <th>Phase</th>
-                    <th>Phase Day</th>
-                    <th>Weight</th>
-                    <th>Calories In</th>
-                    <th>Net</th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedEntries.map((entry, index) => (
-                    <tr key={`${entry.date}-${index}`}>
-                      <td>{entry.date}</td>
-                      <td>{entry.overallDay ?? "-"}</td>
-                      <td>{entry.phaseId ?? "-"}</td>
-                      <td>{entry.dayInPhase ?? "-"}</td>
-                      <td>{entry.weight}</td>
-                      <td>{entry.calIn ?? "-"}</td>
-                      <td>{entry.netCalories ?? "-"}</td>
-                      <td>{entry.notes || "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )}
+        {activeTab === "history" && <HistoryTable sortedEntries={sortedEntries} />}
       </div>
     </div>
-  );
-}
-
-function Input({ label, value, setValue, type = "text", full = false }) {
-  return (
-    <label style={full ? styles.labelFull : styles.label}>
-      {label}
-      <input
-        style={styles.input}
-        type={type}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    </label>
   );
 }
 
